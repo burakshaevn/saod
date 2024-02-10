@@ -28,9 +28,9 @@ struct Stack {
 		}
 	}
 
-	~Stack() {
-		//delete[] stack_;
-	}
+	//~Stack() {
+	//	//delete[] stack_;
+	//}
 
 	bool isCorrectMenuInput(const std::string& string) {
 		if (string.empty() or string.length() > 1 or
