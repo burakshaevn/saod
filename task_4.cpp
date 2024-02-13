@@ -1,51 +1,39 @@
 #include <iostream> 
 #include <string>
-#include <vector> 
 
 using namespace std::string_literals;
 
 #define ERROR_HINT(hint) std::cout << "Ошибка. "s << hint << std::endl;
+const size_t QUERY_SIZE = 10;
 
-struct StackElement {
-	uint64_t data_ = 0;
-	StackElement* next_ = nullptr;
-	StackElement(uint64_t data) : data_(data), next_(nullptr)
-	{}
-};
+struct Query {
+	size_t size_, current_size_;
+	int query_[QUERY_SIZE];
+	int front, back;
 
-struct Stack {
-	size_t size_;
-	size_t size_second_;
-	StackElement* last_;
-	StackElement* last_second_;
 	enum class MenuStatus {
 		EXIT_,
-		CHECK_EMPTY_,
+		IS_EMPTY_,
+		IS_FULLNESS_,
 		APPEND_,
 		DELETE_,
-		PRINT_STACK_,
-		PRINT_STACK_DELETED_ELEMENTS_,
-		WAIT_CHOISE_
+		CURRENT_STATUS_,
+		WAIT_CHOISE
 	};
-	MenuStatus status_ = MenuStatus::WAIT_CHOISE_;
+	MenuStatus status_ = MenuStatus::WAIT_CHOISE;
 
-	Stack() : size_(0), size_second_(0), last_(nullptr), last_second_(nullptr)
-	{}
-
-	~Stack() {
-		while (last_) {
-			StackElement* temp = last_;
-			last_ = last_->next_;
-			delete temp;
-		}
-		while (last_second_) {
-			StackElement* temp = last_second_;
-			last_second_ = last_second_->next_;
-			delete temp;
-		}
+	Query() {
+		size_ = QUERY_SIZE;
+		current_size_ = 0;
+		front = 0;
+		back = 0;
+		query_[QUERY_SIZE] = {};
+		/*for (auto& element : query_) {
+			element = NULL;
+		}*/
 	}
 
-	bool isOnlyNumbers(const std::string& string, const char limit_begin, const char limit_end) {
+	bool isOnlyNumbers(const std::string& string, const char limit_begin, const char limit_end) const {
 		if (string.empty()) return false;
 		else {
 			for (const char& c : string) {
@@ -65,173 +53,110 @@ struct Stack {
 		}
 	}
 
-	template<typename T_size>
-	bool StackIsEmpty(const T_size& size) const {
-		return size == 0;
+	bool QueryIsEmpty() const {
+		return front == back;
 	}
 
-	uint64_t Randomize() {
-		return rand() % 18446744073709551615 + 1;
+	bool QueryIsFull() const {
+		return current_size_ == size_;
 	}
 
-	template<typename T_last, typename T_size>
-	void Append(T_last& last, T_size& size, const std::vector<uint64_t>& data) {
-		for (const auto& num : data) {
-			StackElement* new_element = new StackElement(num);
-			new_element->next_ = last;
-			last = new_element;
-			++size;
+	void Append(const int element) {
+		if (QueryIsFull()) {
+			ERROR_HINT("Невозможно добавить элемент, очередь переполнена."s);
+		}
+		else {
+			query_[current_size_] = element;
+			++current_size_;
+			back = current_size_;
+			std::cout << "Элемент добавлен в очередь."s << std::endl;
 		}
 	}
 
-	template<typename T_last, typename T_size>
-	void Delete(T_last& last, T_size& size, const bool needappend = false) {
-		if (StackIsEmpty(size)) {
-			ERROR_HINT("Невозможно удалить элемент: стек пуст."s);
+	void Delete() {
+		if (QueryIsEmpty()) {
+			ERROR_HINT("Невозможно удалить элемент, очередь пуста."s);
+		}
+		else {
+			query_[current_size_] = 0;
+			--current_size_;
+			back = current_size_;
+			std::cout << "Элемент удалён из очереди."s << std::endl;
+		}
+	}
+
+	void PrintCurrentQuery() const {
+		if (QueryIsEmpty()) {
+			std::cout << "Очередь пуста." << std::endl;
 			return;
 		}
 		else {
-			StackElement* temp = last;
-			last = last_->next_;
-			if (!needappend) std::cout << "Элемент удалён из стека."s << std::endl;
-			else {
-				Append(last_second_, size_second_, { temp->data_ });
-				std::cout << "Элемент удалён из стека и добавлен в стек удалённых элементов."s << std::endl;
-			}
-			delete temp;
-			--size;
-		}
-	}
-
-	template<typename T_size, typename T_last>
-	void PrintStack(const T_size& size, const T_last& last) const {
-		if (StackIsEmpty(size)) {
-			std::cout << "Стек пуст." << std::endl;
-			return;
-		}
-		else {
-			std::cout << "СОСТОЯНИЕ СТЕКА:" << std::endl;
-			StackElement* current = last;
-			size_t index = 0;
-			while (current) {
-				std::cout << "[" << index << "]: " << current->data_ << std::endl;
-				current = current->next_;
-				++index;
-			}
-			delete current;
+			std::cout << "СОСТОЯНИЕ ОЧЕРЕДИ:"s << std::endl; \
+				for (int i = front; i < back; ++i) {
+					std::cout << "["s << i << "]: "s << query_[i] << std::endl;
+				}
 		}
 	}
 
 	void Menu() {
+		std::cout << "ВВЕДИТЕ НОМЕР КОМАНДЫ"s << std::endl;
 		do {
-			std::string user_input;
-			std::cout << "ВВЕДИТЕ НОМЕР КОМАНДЫ"s << std::endl;
-			std::cout << "1 >> Проверка пустоты стека"s << std::endl;
-			std::cout << "2 >> Добавление элемента в вершину стека"s << std::endl;
-			std::cout << "3 >> Удаление элемента из вершины стека"s << std::endl;
-			std::cout << "4 >> Вывод текущего состояния стека на экран"s << std::endl;
-			std::cout << "5 >> Вывод текущего состояния стека удалённых элементов на экран"s << std::endl;
+			std::cout << "1 >> Проверка пустоты очереди"s << std::endl;
+			std::cout << "2 >> Проверка заполненности очереди"s << std::endl;
+			std::cout << "3 >> Добавление элемента в вершину очереди"s << std::endl;
+			std::cout << "4 >> Удаление элемента из вершины очереди"s << std::endl;
+			std::cout << "5 >> Вывод текущего состояние очереди на экран"s << std::endl;
 			std::cout << "0 >> Завершение работы программы"s << std::endl;
+			std::string user_input;
 			std::getline(std::cin, user_input);
-			std::cout << std::endl;
+
 			if (isCorrectMenuInput(user_input)) {
 				switch (status_) {
-				case Stack::MenuStatus::EXIT_:
+				case Query::MenuStatus::EXIT_:
 					break;
 
-				case Stack::MenuStatus::CHECK_EMPTY_:
-					if (StackIsEmpty(size_)) {
-						std::cout << "Стек пуст."s << std::endl;
+				case Query::MenuStatus::IS_EMPTY_:
+					if (QueryIsEmpty()) {
+						std::cout << "Очередь пуста."s << std::endl;
 					}
-					else std::cout << "Стек не пуст."s << std::endl;
+					else std::cout << "Очередь не пуста."s << std::endl;
 					std::cout << std::endl;
 					break;
 
-				case Stack::MenuStatus::APPEND_: {
+				case Query::MenuStatus::IS_FULLNESS_:
+					if (QueryIsFull()) {
+						std::cout << "Очередь заполнена."s << std::endl;
+					}
+					else std::cout << "Очередь не заполнена."s << std::endl;
+					std::cout << std::endl;
+					break;
+
+				case Query::MenuStatus::APPEND_: {
 					bool added = false;
 					do
 					{
-						std::cout << "1 >> Создать новый элемент"s << std::endl;
-						std::cout << "2 >> Восстановить элемент из стека удалённых элементов"s << std::endl;
-						std::string menu;
-						getline(std::cin, menu);
-
-						if (isOnlyNumbers(menu, '1', '2') and menu == "1"s) {
-							std::cout << "Укажите количество вводимых элементов: "s;
-							std::string count;
-							getline(std::cin, count);
-							if (isOnlyNumbers(count, '0', '9') and stoi(count) != '0') {
-								std::vector<uint64_t> nums;
-								std::cout << "Чтобы сгенерировать случайное число, введите пустую строку."s << std::endl;
-								do
-								{
-									std::string element;
-									std::cout << "Введите добавляемый элемент (натуральное число или 0): "s;
-									getline(std::cin, element);
-									if (element.empty()) {
-										uint64_t num = Randomize();
-										nums.push_back(num);
-									}
-									else if (isOnlyNumbers(element, '0', '9')) {
-										nums.push_back(stoi(element));
-									}
-									else ERROR_HINT("Ожидается натуральное число [1, inf) или 0.");
-								} while (nums.size() != stoi(count));
-								Append(last_, size_, nums);
-								added = true;
-							}
-							else ERROR_HINT("Ожидается натуральное число [1, inf)."s);
+						std::cout << "Введите добавляемый элемент (натуральное число или 0): "s;
+						std::string n_string = ""s;
+						getline(std::cin, n_string);
+						if (isOnlyNumbers(n_string, '0', '9')) {
+							Append(stoi(n_string));
+							added = true;
 						}
-
-						else if (isOnlyNumbers(menu, '1', '2') and menu == "2"s) {
-							std::cout << "Укажите количество восстанавливаемых элементов: "s;
-							std::string count;
-							getline(std::cin, count);
-							if (isOnlyNumbers(count, '0', '9') and stoi(count) <= static_cast<int>(size_second_) and stoi(count) != '0') {
-								for (size_t i = 0; i < static_cast<size_t>(stoi(count)); ++i) {
-									StackElement* temp = last_second_;
-									Append(last_, size_, { temp->data_ });
-									last_second_ = last_second_->next_;
-									delete temp;
-									added = true;
-								}
-							}
-							else { ERROR_HINT("Ожидается натуральное число [1, inf) и не больше содержимого корзины ("s << static_cast<int>(size_second_) << ")."s); std::cout << std::endl; }
-						}
-
+						else { ERROR_HINT("Ожидается любое число [1, inf)."); std::cout << std::endl; }
 					} while (added != true);
-					std::cout << std::endl;
-				}break;
+				} std::cout << std::endl; break;
 
-				case Stack::MenuStatus::DELETE_: {
+				case Query::MenuStatus::DELETE_: {
 					bool deleted = false;
 					do
 					{
-						std::cout << "1 >> Удалить с освобождением памяти"s << std::endl;
-						std::cout << "2 >> Удалить и внести в стек удалённых элементов"s << std::endl;
-						std::string menu;
-						getline(std::cin, menu);
-
-						if (isOnlyNumbers(menu, '1', '2') and menu == "1"s) {
-							Delete(last_, size_);
-							deleted = true;
-						}
-						else if (isOnlyNumbers(menu, '1', '2') and menu == "2"s) {
-							Delete(last_, size_, true);
-							deleted = true;
-						}
-						else ERROR_HINT("Ожидается натуральное число [1,2].");
+						Delete();
+						deleted = true;
 					} while (deleted != true);
-					std::cout << std::endl;
-				}break;
+				}std::cout << std::endl; break;
 
-				case Stack::MenuStatus::PRINT_STACK_:
-					PrintStack(size_, last_);
-					std::cout << std::endl;
-					break;
-
-				case Stack::MenuStatus::PRINT_STACK_DELETED_ELEMENTS_:
-					PrintStack(size_second_, last_second_);
+				case Query::MenuStatus::CURRENT_STATUS_:
+					PrintCurrentQuery();
 					std::cout << std::endl;
 					break;
 
@@ -239,14 +164,15 @@ struct Stack {
 					break;
 				}
 			}
-			else ERROR_HINT("Номер команды может быть в интервале [0,5].");
+			else { ERROR_HINT("Ожидается натуральное число в интервале [0,5]."); std::cout << std::endl; }
 		} while (status_ != MenuStatus::EXIT_);
+		std::cout << std::endl;
 	}
 };
 
 int main() {
 	setlocale(LC_ALL, "RUS");
-	Stack stack_object_;
-	stack_object_.Menu();
+	Query query;
+	query.Menu();
 	return 0;
 }
