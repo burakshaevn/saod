@@ -1,11 +1,10 @@
-// 4 task
-#include <iostream> 
+п»ї#include <iostream> 
 #include <string>
 #include <vector> 
 
 using namespace std::string_literals;
 
-#define ERROR_HINT(hint) std::cout << "Ошибка. "s << hint << std::endl;
+#define ERROR_HINT(hint) std::cout << "РћС€РёР±РєР°. "s << hint << std::endl;
 
 struct StackElement {
 	uint64_t data_;
@@ -84,7 +83,7 @@ struct Stack {
 
 	[[nodiscard]] bool Moving(StackElement** from, StackElement** to, size_t& from_size, size_t& to_size) {
 		if (StackIsEmpty(from_size)) {
-			ERROR_HINT("Невозможно произвести перемещение: источник пуст.");
+			ERROR_HINT("РќРµРІРѕР·РјРѕР¶РЅРѕ РїСЂРѕРёР·РІРµСЃС‚Рё РїРµСЂРµРјРµС‰РµРЅРёРµ: РёСЃС‚РѕС‡РЅРёРє РїСѓСЃС‚.");
 			return false;
 		}
 		else {
@@ -99,7 +98,7 @@ struct Stack {
 
 	[[nodiscard]] bool Delete(StackElement** from, size_t& from_size) {
 		if (StackIsEmpty(from_size)) {
-			ERROR_HINT("Невозможно произвести удаление: стек пуст."s);
+			ERROR_HINT("РќРµРІРѕР·РјРѕР¶РЅРѕ РїСЂРѕРёР·РІРµСЃС‚Рё СѓРґР°Р»РµРЅРёРµ: СЃС‚РµРє РїСѓСЃС‚."s);
 			return false;
 		}
 		else {
@@ -112,9 +111,9 @@ struct Stack {
 	}
 
 	void PrintStack(StackElement* stack, const size_t& size) const {
-		std::cout << "СОСТОЯНИЕ СТЕКА:" << std::endl;
+		std::cout << "РЎРћРЎРўРћРЇРќРР• РЎРўР•РљРђ:" << std::endl;
 		if (StackIsEmpty(size)) {
-			std::cout << "Стек пуст." << std::endl;
+			std::cout << "РЎС‚РµРє РїСѓСЃС‚." << std::endl;
 			return;
 		}
 		else {
@@ -137,14 +136,14 @@ struct Stack {
 	}
 
 	void Menu() {
-		std::cout << "ВВЕДИТЕ НОМЕР КОМАНДЫ"s << std::endl;
+		std::cout << "Р’Р’Р•Р”РРўР• РќРћРњР•Р  РљРћРњРђРќР”Р«"s << std::endl;
 		do {
-			std::cout << "1 >> Проверка пустоты стека"s << std::endl;
-			std::cout << "2 >> Добавление элемента в вершину стека"s << std::endl;
-			std::cout << "3 >> Удаление элемента из вершины стека"s << std::endl;
-			std::cout << "4 >> Вывод текущего состояния стека на экран"s << std::endl;
-			std::cout << "5 >> Вывод текущего состояния стека удалённых элементов на экран"s << std::endl;
-			std::cout << "0 >> Завершение работы программы"s << std::endl;
+			std::cout << "1 >> РџСЂРѕРІРµСЂРєР° РїСѓСЃС‚РѕС‚С‹ СЃС‚РµРєР°"s << std::endl;
+			std::cout << "2 >> Р”РѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РІ РІРµСЂС€РёРЅСѓ СЃС‚РµРєР°"s << std::endl;
+			std::cout << "3 >> РЈРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РёР· РІРµСЂС€РёРЅС‹ СЃС‚РµРєР°"s << std::endl;
+			std::cout << "4 >> Р’С‹РІРѕРґ С‚РµРєСѓС‰РµРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ СЃС‚РµРєР° РЅР° СЌРєСЂР°РЅ"s << std::endl;
+			std::cout << "5 >> Р’С‹РІРѕРґ С‚РµРєСѓС‰РµРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ СЃС‚РµРєР° СѓРґР°Р»С‘РЅРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЌРєСЂР°РЅ"s << std::endl;
+			std::cout << "0 >> Р—Р°РІРµСЂС€РµРЅРёРµ СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹"s << std::endl;
 			std::string user_input;
 			std::getline(std::cin, user_input);
 			std::cout << std::endl;
@@ -156,31 +155,31 @@ struct Stack {
 
 				case Stack::MenuStatus::CHECK_EMPTY_:
 					if (StackIsEmpty(size_)) {
-						std::cout << "Стек пуст."s << std::endl;
+						std::cout << "РЎС‚РµРє РїСѓСЃС‚."s << std::endl;
 					}
-					else std::cout << "Стек не пуст."s << std::endl;
+					else std::cout << "РЎС‚РµРє РЅРµ РїСѓСЃС‚."s << std::endl;
 					std::cout << std::endl;
 					break;
 
 				case Stack::MenuStatus::APPEND_: {
 					bool added = false;
 					do {
-						std::cout << "1 >> Создать новый элемент"s << std::endl;
-						std::cout << "2 >> Восстановить элемент из стека удалённых элементов"s << std::endl;
+						std::cout << "1 >> РЎРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚"s << std::endl;
+						std::cout << "2 >> Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СЌР»РµРјРµРЅС‚ РёР· СЃС‚РµРєР° СѓРґР°Р»С‘РЅРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ"s << std::endl;
 						std::string menu;
 						getline(std::cin, menu);
 
 						if (isOnlyNumbers(menu, '1', '2') and menu == "1"s) {
-							std::cout << "Укажите количество вводимых элементов: "s;
+							std::cout << "РЈРєР°Р¶РёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ РІРІРѕРґРёРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ: "s;
 							std::string count;
 							getline(std::cin, count);
 
 							if (isOnlyNumbers(count, '0', '9') and stoi(count) != '0') {
 								std::vector<uint64_t> nums;
-								std::cout << "Чтобы сгенерировать случайное число, введите пустую строку."s << std::endl;
+								std::cout << "Р§С‚РѕР±С‹ СЃРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ СЃР»СѓС‡Р°Р№РЅРѕРµ С‡РёСЃР»Рѕ, РІРІРµРґРёС‚Рµ РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ."s << std::endl;
 								do {
 									std::string element;
-									std::cout << "Введите добавляемый элемент (натуральное число или 0): "s;
+									std::cout << "Р’РІРµРґРёС‚Рµ РґРѕР±Р°РІР»СЏРµРјС‹Р№ СЌР»РµРјРµРЅС‚ (РЅР°С‚СѓСЂР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ РёР»Рё 0): "s;
 									getline(std::cin, element);
 									if (element.empty()) {
 										uint64_t num = Randomize();
@@ -189,19 +188,19 @@ struct Stack {
 									else if (isOnlyNumbers(element, '0', '9')) {
 										nums.push_back(stoi(element));
 									}
-									else ERROR_HINT("Ожидается натуральное число или 0.");
+									else ERROR_HINT("РћР¶РёРґР°РµС‚СЃСЏ РЅР°С‚СѓСЂР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ РёР»Рё 0.");
 
 								} while (nums.size() != stoi(count));
 								if (Append(nums)) {
-									std::cout << "Добавление выполнено успешно."s << std::endl;
+									std::cout << "Р”РѕР±Р°РІР»РµРЅРёРµ РІС‹РїРѕР»РЅРµРЅРѕ СѓСЃРїРµС€РЅРѕ."s << std::endl;
 									added = true;
 								}
 							}
-							else ERROR_HINT("Ожидается натуральное число или 0."s);
+							else ERROR_HINT("РћР¶РёРґР°РµС‚СЃСЏ РЅР°С‚СѓСЂР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ РёР»Рё 0."s);
 						}
 
 						else if (isOnlyNumbers(menu, '1', '2') and menu == "2"s) {
-							std::cout << "Укажите количество восстанавливаемых элементов: "s;
+							std::cout << "РЈРєР°Р¶РёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ: "s;
 							std::string count;
 							getline(std::cin, count);
 							if (isOnlyNumbers(count, '0', '9') and stoi(count) <= static_cast<int>(deleted_size_) and stoi(count) != '0') {
@@ -210,7 +209,7 @@ struct Stack {
 									added = true;
 								}
 							}
-							else { ERROR_HINT("Ожидается натуральное число, не превышающее число содержимого корзины ("s << static_cast<int>(deleted_size_) << ")."s); std::cout << std::endl; }
+							else { ERROR_HINT("РћР¶РёРґР°РµС‚СЃСЏ РЅР°С‚СѓСЂР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ, РЅРµ РїСЂРµРІС‹С€Р°СЋС‰РµРµ С‡РёСЃР»Рѕ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РєРѕСЂР·РёРЅС‹ ("s << static_cast<int>(deleted_size_) << ")."s); std::cout << std::endl; }
 						}
 
 					} while (added != true);
@@ -220,23 +219,23 @@ struct Stack {
 				case Stack::MenuStatus::DELETE_: {
 					bool deleted = false;
 					do {
-						std::cout << "1 >> Удалить с освобождением памяти"s << std::endl;
-						std::cout << "2 >> Удалить и внести в стек удалённых элементов"s << std::endl;
+						std::cout << "1 >> РЈРґР°Р»РёС‚СЊ СЃ РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµРј РїР°РјСЏС‚Рё"s << std::endl;
+						std::cout << "2 >> РЈРґР°Р»РёС‚СЊ Рё РІРЅРµСЃС‚Рё РІ СЃС‚РµРє СѓРґР°Р»С‘РЅРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ"s << std::endl;
 						std::string menu;
 						getline(std::cin, menu);
 
 						if (isOnlyNumbers(menu, '1', '2') and menu == "1"s) {
 							if (Delete(&stack_, size_)) {
-								std::cout << "Удаление выполнено успешно."s << std::endl;
+								std::cout << "РЈРґР°Р»РµРЅРёРµ РІС‹РїРѕР»РЅРµРЅРѕ СѓСЃРїРµС€РЅРѕ."s << std::endl;
 							}
 						}
 						else if (isOnlyNumbers(menu, '1', '2') and menu == "2"s) {
 							if (Moving(&stack_, &delete_stack_, size_, deleted_size_)) {
-								std::cout << "Удаление и перенос выполнены успешно."s << std::endl;
+								std::cout << "РЈРґР°Р»РµРЅРёРµ Рё РїРµСЂРµРЅРѕСЃ РІС‹РїРѕР»РЅРµРЅС‹ СѓСЃРїРµС€РЅРѕ."s << std::endl;
 								deleted = true;
 							}
 						}
-						else ERROR_HINT("Ожидается число в интервале [1,2].");
+						else ERROR_HINT("РћР¶РёРґР°РµС‚СЃСЏ С‡РёСЃР»Рѕ РІ РёРЅС‚РµСЂРІР°Р»Рµ [1,2].");
 					} while (deleted != true);
 					std::cout << std::endl;
 				}break;
@@ -255,7 +254,7 @@ struct Stack {
 					break;
 				}
 			}
-			else ERROR_HINT("Ожидается число в интервале [0,5].");
+			else ERROR_HINT("РћР¶РёРґР°РµС‚СЃСЏ С‡РёСЃР»Рѕ РІ РёРЅС‚РµСЂРІР°Р»Рµ [0,5].");
 		} while (status_ != MenuStatus::EXIT_);
 	}
 };
